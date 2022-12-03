@@ -18,6 +18,23 @@ def bearer_oauth(r):
     r.headers["User-Agent"] = "v2FilteredStreamPython"
     return r
 
+def set_rules():
+    # You can adjust the rules if needed
+    sample_rules = [
+        {"value": "@ProjetoLibra"}
+    ]
+    payload = {"add": sample_rules}
+    response = requests.post(
+        "https://api.twitter.com/2/tweets/search/stream/rules",
+        auth=bearer_oauth,
+        json=payload,
+    )
+    if response.status_code != 201:
+        raise Exception(
+            "Cannot add rules (HTTP {}): {}".format(response.status_code, response.text)
+        )
+    print(json.dumps(response.json()))
+
 def send_to_sqs_queue(message):
 
     # Create SQS client
